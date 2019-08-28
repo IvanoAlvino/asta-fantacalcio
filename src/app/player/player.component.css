@@ -1,0 +1,18 @@
+.row {
+  margin-top: 15%;
+  margin-bottom: 20px;
+}
+
+.player-name {
+  font-size: 120px;
+}
+
+.player-team {
+  font-size: 60px;
+  color: #5e5c6e;
+}
+
+.player-role {
+  font-size: 30px;
+  color: #838199;
+}

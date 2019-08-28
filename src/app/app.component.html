@@ -1,14 +1,27 @@
-<!--The content below is only a placeholder and can be replaced.-->
-<h1 class="text-center">
-  {{title}}
-</h1>
+<div class="container">
+  <h1 class="text-center" *ngIf="!nextPlayer">
+    {{title}}
+  </h1>
 
-<!--Grid row-->
-<div class="mx-auto" style="width: 200px;">
-  <form>
-    <div class="form-group">
-      <label class="border p-2 bg-info" for="lista-giocatori-csv">Carica qui il tuo file csv</label>
-      <input type="file" class="form-control-file" id="lista-giocatori-csv" (change)="onFileLoad($event.target.files)">
+  <!--Grid row-->
+  <div class="mx-auto" style="width: 200px;" *ngIf="!nextPlayer">
+    <form>
+      <div class="form-group">
+        <label class="border p-2 bg-info" for="lista-giocatori-csv">Carica qui il tuo file csv</label>
+        <input type="file" [accept]="'text/csv'" class="form-control-file" id="lista-giocatori-csv"
+               (change)="onFileLoad($event.target.files)">
+      </div>
+    </form>
+  </div>
+
+  <div *ngIf="nextPlayer">
+    <div class="row">
+      <div class="col-sm-12">
+        <player [player]="nextPlayer"></player>
+        <div class="text-center">
+          <button class="btn btn-primary" (click)="drawNextPlayer()">Nuovo Giocatore</button>
+        </div>
+      </div>
     </div>
-  </form>
+  </div>
 </div>
