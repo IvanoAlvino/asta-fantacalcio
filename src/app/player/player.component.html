@@ -1,7 +1,5 @@
 <h1 class="player-name">{{_player.nome}}</h1>
 <h2 class="player-team">{{_player.squadra}}</h2>
 <h3 class="player-role">{{ruolo}}</h3>
-
-<div class="text-center">
-  <button class="btn btn-primary" (click)="nextPlayer.emit()">Nuovo Giocatore</button>
-</div>
+<hr>
+<ng-keyboard-shortcuts [shortcuts]="shortcuts"></ng-keyboard-shortcuts>

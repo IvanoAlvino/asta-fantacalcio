@@ -1,5 +1,6 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
+import { KeyboardShortcutsModule }     from 'ng-keyboard-shortcuts';
 
 import { AppComponent } from './app.component';
 import { PlayerComponent } from './player/player.component';
@@ -12,7 +13,8 @@ import { RecentListComponent } from './recent-list/recent-list.component';
     RecentListComponent
   ],
   imports: [
-    BrowserModule
+    BrowserModule,
+    KeyboardShortcutsModule.forRoot(),
   ],
   providers: [],
   bootstrap: [AppComponent]
