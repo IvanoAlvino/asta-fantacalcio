@@ -19,6 +19,7 @@ export class AppComponent {
   private players: Player[];
   private currentPlayer: Player;
   private recentPlayers: Player[] = [];
+  private availableIndexes: number[] = [];
   private MAX_LENGTH: number = 10;
 
   onFileLoad(files: FileList) {
@@ -33,6 +34,7 @@ export class AppComponent {
         .fromString(<string> fileReader.result)
         .then((jsonObj)=>{
           this.players = jsonObj;
+          this.initAvailableIndexes(jsonObj);
           this.drawNextPlayer();
         });
     };
@@ -40,17 +42,46 @@ export class AppComponent {
   }
 
   drawNextPlayer(): void {
+    if (this.availableIndexes.length === 0) {
+      return;
+    }
+
     if (this.currentPlayer) {
       this.updateRecentPlayers();
     }
-    const randomNumber: number = Math.floor(Math.random() * this.players.length);
-    this.currentPlayer = this.players[randomNumber];
+
+    const index = this.availableIndexes.shift();
+    this.currentPlayer = this.players[index];
   }
 
   private updateRecentPlayers() {
     this.recentPlayers.push(this.currentPlayer);
     if (this.recentPlayers.length > this.MAX_LENGTH) {
       this.recentPlayers.shift();
+    }
+  }
+
+  private initAvailableIndexes(jsonObj: Player[]) {
+    for (let i = 0; i < jsonObj.length; i++) {
+      this.availableIndexes.push(i);
+    }
+    this.shuffle(this.availableIndexes);
+  }
+
+  private shuffle(array) {
+    let currentIndex = array.length, temporaryValue, randomIndex;
+
+    // While there remain elements to shuffle...
+    while (0 !== currentIndex) {
+
+      // Pick a remaining element...
+      randomIndex = Math.floor(Math.random() * currentIndex);
+      currentIndex -= 1;
+
+      // And swap it with the current element.
+      temporaryValue = array[currentIndex];
+      array[currentIndex] = array[randomIndex];
+      array[randomIndex] = temporaryValue;
     }
   }
 }
