@@ -17,7 +17,9 @@ export interface Player {
 export class AppComponent {
   title = 'Asta FantaTigerz 2019';
   private players: Player[];
-  private nextPlayer: Player;
+  private currentPlayer: Player;
+  private recentPlayers: Player[] = [];
+  private MAX_LENGTH: number = 10;
 
   onFileLoad(files: FileList) {
     const fileReader = new FileReader();
@@ -31,14 +33,24 @@ export class AppComponent {
         .fromString(<string> fileReader.result)
         .then((jsonObj)=>{
           this.players = jsonObj;
-          this.nextPlayer = this.players[0];
+          this.drawNextPlayer();
         });
     };
     fileReader.readAsText(files[0]);
   }
 
   drawNextPlayer(): void {
+    if (this.currentPlayer) {
+      this.updateRecentPlayers();
+    }
     const randomNumber: number = Math.floor(Math.random() * this.players.length);
-    this.nextPlayer = this.players[randomNumber];
+    this.currentPlayer = this.players[randomNumber];
+  }
+
+  private updateRecentPlayers() {
+    this.recentPlayers.push(this.currentPlayer);
+    if (this.recentPlayers.length > this.MAX_LENGTH) {
+      this.recentPlayers.shift();
+    }
   }
 }

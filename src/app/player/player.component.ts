@@ -1,4 +1,4 @@
-import {Component, Input, OnInit} from '@angular/core';
+import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 import {Player} from "../app.component";
 
 @Component({
@@ -14,10 +14,13 @@ export class PlayerComponent {
   @Input()
   set player(value: Player) {
     this._player = value;
-    this.ruolo = this.generateRuoloString();
+    this.ruolo = this.generateRoleString();
   }
 
-  private generateRuoloString() {
+  @Output()
+  nextPlayer: EventEmitter<void> = new EventEmitter<void>();
+
+  private generateRoleString() {
     switch (this.player.ruolo) {
       case "P": return "Portiere";
       case "D": return "Difensore";

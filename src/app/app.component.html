@@ -1,10 +1,9 @@
 <div class="container">
-  <h1 class="text-center" *ngIf="!nextPlayer">
+  <h1 class="text-center" *ngIf="!currentPlayer">
     {{title}}
   </h1>
 
-  <!--Grid row-->
-  <div class="mx-auto" style="width: 200px;" *ngIf="!nextPlayer">
+  <div class="mx-auto" style="width: 200px;" *ngIf="!currentPlayer">
     <form>
       <div class="form-group">
         <label class="border p-2 bg-info" for="lista-giocatori-csv">Carica qui il tuo file csv</label>
@@ -14,13 +13,13 @@
     </form>
   </div>
 
-  <div *ngIf="nextPlayer">
+  <div *ngIf="currentPlayer">
     <div class="row">
-      <div class="col-sm-12">
-        <player [player]="nextPlayer"></player>
-        <div class="text-center">
-          <button class="btn btn-primary" (click)="drawNextPlayer()">Nuovo Giocatore</button>
-        </div>
+      <div class="col-sm-12 text-center">
+        <player [player]="currentPlayer" (nextPlayer)="drawNextPlayer()"></player>
+        <recent-players *ngIf="recentPlayers.length > 0"
+                        [recentPlayers]="recentPlayers.reverse()">
+        </recent-players>
       </div>
     </div>
   </div>

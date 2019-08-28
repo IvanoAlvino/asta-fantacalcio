@@ -1,9 +1,7 @@
-<div class="row">
-  <div class="col-sm-12">
-    <div class="text-center">
-      <h1 class="player-name">{{_player.nome}}</h1>
-      <h2 class="player-team">{{_player.squadra}}</h2>
-      <h3 class="player-role">{{ruolo}}</h3>
-    </div>
-  </div>
+<h1 class="player-name">{{_player.nome}}</h1>
+<h2 class="player-team">{{_player.squadra}}</h2>
+<h3 class="player-role">{{ruolo}}</h3>
+
+<div class="text-center">
+  <button class="btn btn-primary" (click)="nextPlayer.emit()">Nuovo Giocatore</button>
 </div>
