@@ -27,6 +27,9 @@ export class PlayerComponent implements AfterViewInit {
 
   private ruolo: string;
 
+  /**
+   * Register the keyboard shortcuts.
+   */
   ngAfterViewInit(): void {
     this.shortcuts.push(
       {
@@ -35,6 +38,9 @@ export class PlayerComponent implements AfterViewInit {
       });
   }
 
+  /**
+   * Generate a user friendly name to display the role of the player.
+   */
   private generateRoleString() {
     switch (this.player.ruolo) {
       case "P":
