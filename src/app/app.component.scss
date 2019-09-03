@@ -2,10 +2,18 @@ input[type='file'] {
   opacity:0
 }
 
+.title {
+  font-size: 80px;
+}
+
 .csv-label {
   width: 305px;
   font-weight: 700;
   color: aliceblue;
+  margin-top: 50px;
+  height: 80px;
+  line-height: 62px;
+  font-size: 20px;
 }
 
 .container {
