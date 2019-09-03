@@ -1,43 +1,45 @@
 <div class="container">
-  <h1 class="text-center" *ngIf="!currentPlayer">
-    Asta FantaTigerz 2019
-  </h1>
+    <h1 class="text-center" *ngIf="!currentPlayer">
+        Asta FantaTigerz 2019
+    </h1>
 
-  <!-- File input to load the csv file -->
-  <div class="mx-auto" style="width: 200px;" *ngIf="!currentPlayer">
-    <form #myForm="ngForm">
-      <div class="form-group">
-        <label class="border p-2 bg-info" for="lista-giocatori-csv">
-          Carica qui il tuo file csv
-        </label>
-        <input type="file" [accept]="'text/csv'" class="form-control-file" id="lista-giocatori-csv"
-               (change)="readCsvFile($event.target.files)">
-      </div>
+    <!-- File input to load the csv file -->
+    <div class="mx-auto" *ngIf="!currentPlayer">
+        <form #myForm="ngForm">
+            <div class="form-group row">
+                <div class="col-sm-12 text-center">
+                    <label class="border p-2 bg-info csv-label" for="lista-giocatori-csv">
+                        Carica qui il tuo file csv
+                    </label>
+                    <input type="file" [accept]="'text/csv'" class="form-control-file" id="lista-giocatori-csv"
+                           (change)="readCsvFile($event.target.files)">
+                </div>
+            </div>
 
-      <!-- Radio buttons -->
-      <div class="form-check">
-        <input class="form-check-input" type="radio" name="drawStrategy" id="random" [value]="'full'"
-               [(ngModel)]="shuffleStrategy">
-        <label class="form-check-label" for="random">Full Random</label>
-      </div>
-
-      <div class="form-check">
-        <input class="form-check-input" type="radio" name="drawStrategy" id="random-per-role" [value]="'role'"
-               [(ngModel)]="shuffleStrategy">
-        <label class="form-check-label" for="random-per-role">Random per Ruolo</label>
-      </div>
-    </form>
-  </div>
-
-  <!-- Show currently drawn player and the list of recent drawn players -->
-  <div *ngIf="currentPlayer">
-    <div class="row">
-      <div class="col-sm-12 text-center">
-        <player [player]="currentPlayer" (nextPlayer)="drawNextPlayer()"></player>
-        <recent-players *ngIf="recentPlayers.length > 0"
-                        [recentPlayers]="recentPlayers.reverse()">
-        </recent-players>
-      </div>
+            <form class="form">
+                <div class="inputGroup">
+                    <input id="random" name="drawStrategy" type="radio" [value]="'full'" [(ngModel)]="shuffleStrategy"/>
+                    <label for="random">Full Random</label>
+                </div>
+                <div class="inputGroup">
+                    <input id="random-per-role" name="drawStrategy" type="radio" [value]="'role'"
+                           [(ngModel)]="shuffleStrategy"/>
+                    <label for="random-per-role">Random per Ruolo</label>
+                </div>
+            </form>
+            <link href="https://fonts.googleapis.com/css?family=Fira+Sans" rel="stylesheet">
+        </form>
     </div>
-  </div>
+
+    <!-- Show currently drawn player and the list of recent drawn players -->
+    <div *ngIf="currentPlayer">
+        <div class="row">
+            <div class="col-sm-12 text-center">
+                <player [player]="currentPlayer" (nextPlayer)="drawNextPlayer()"></player>
+                <recent-players *ngIf="recentPlayers.length > 0"
+                                [recentPlayers]="recentPlayers.reverse()">
+                </recent-players>
+            </div>
+        </div>
+    </div>
 </div>
