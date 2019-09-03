@@ -8,7 +8,7 @@
       <div class="form-group">
         <label class="border p-2 bg-info" for="lista-giocatori-csv">Carica qui il tuo file csv</label>
         <input type="file" [accept]="'text/csv'" class="form-control-file" id="lista-giocatori-csv"
-               (change)="onFileLoad($event.target.files)">
+               (change)="readCsvFile($event.target.files)">
       </div>
     </form>
   </div>

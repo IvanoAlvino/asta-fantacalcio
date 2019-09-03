@@ -21,27 +21,41 @@ export class AppComponent {
   private recentPlayers: Player[] = [];
   private availableIndexes: number[] = [];
   private MAX_LENGTH: number = 10;
+  private converter = csv({
+    delimiter: ';',
+    noheader: true,
+    headers: ['id','squadra', 'nome', 'ruolo', 'ruoloEsteso']
+  });
 
-  onFileLoad(files: FileList) {
+  /**
+   * Parse the given csv file and start drawing players.
+   * @param files The files array that contains the provided csv file.
+   */
+  readCsvFile(files: FileList): void {
     const fileReader = new FileReader();
-    fileReader.onload = (e) => {
-      const converter = csv({
-        delimiter: ';',
-        noheader: true,
-        headers: ['id','squadra', 'nome', 'ruolo', 'ruoloEsteso']
-      });
-      converter
-        .fromString(<string> fileReader.result)
-        .then((jsonObj)=>{
-          this.players = jsonObj;
-          this.initAvailableIndexes(jsonObj);
-          this.drawNextPlayer();
-        });
-    };
+    fileReader.onload = () => this.startDrawingPlayers(fileReader);
     fileReader.readAsText(files[0]);
   }
 
+  /**
+   * Start drawing the players.
+   * @param fileReader The file reader used to read the csv file
+   */
+  private startDrawingPlayers(fileReader: FileReader): void {
+    this.converter
+      .fromString(<string> fileReader.result)
+      .then((players: Player[]) => {
+        this.players = players;
+        this.initAvailableIndexes();
+        this.drawNextPlayer();
+      });
+  }
+
+  /**
+   * Draw the next player. Stop drawing when no more players are left to be drawn.
+   */
   drawNextPlayer(): void {
+    // If there are no more players, stop drawing
     if (this.availableIndexes.length === 0) {
       return;
     }
@@ -54,22 +68,39 @@ export class AppComponent {
     this.currentPlayer = this.players[index];
   }
 
-  private updateRecentPlayers() {
+  /**
+   * Update the {@link recentPlayers} list. The list will contain {@link MAX_LENGTH} at most.
+   */
+  private updateRecentPlayers(): void {
+    // If no player has been drawn yet, no need to update recent players
+    if (!this.currentPlayer) {
+      return;
+    }
     this.recentPlayers.push(this.currentPlayer);
+    // Crop the length of the recent player's list
     if (this.recentPlayers.length > this.MAX_LENGTH) {
       this.recentPlayers.shift();
     }
   }
 
-  private initAvailableIndexes(jsonObj: Player[]) {
-    for (let i = 0; i < jsonObj.length; i++) {
+  /**
+   * Init {@link availableIndexes}, the support array that will be used to draw the next random player.
+   */
+  private initAvailableIndexes() {
+    for (let i = 0; i < this.players.length; i++) {
       this.availableIndexes.push(i);
     }
-    this.shuffle(this.availableIndexes);
+    AppComponent.shuffle(this.availableIndexes);
   }
 
-  private shuffle(array) {
-    let currentIndex = array.length, temporaryValue, randomIndex;
+  /**
+   * Shuffle the provided array.
+   * @param array The array to shuffle
+   */
+  private static shuffle(array) {
+    let currentIndex = array.length;
+    let temporaryValue;
+    let randomIndex;
 
     // While there remain elements to shuffle...
     while (0 !== currentIndex) {
