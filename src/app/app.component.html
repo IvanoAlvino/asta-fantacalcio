@@ -1,8 +1,9 @@
 <div class="container">
   <h1 class="text-center" *ngIf="!currentPlayer">
-    {{title}}
+    Asta FantaTigerz 2019
   </h1>
 
+  <!-- File input to load the csv file -->
   <div class="mx-auto" style="width: 200px;" *ngIf="!currentPlayer">
     <form>
       <div class="form-group">
@@ -13,6 +14,7 @@
     </form>
   </div>
 
+  <!-- Show currently drawn player and the list of recent drawn players -->
   <div *ngIf="currentPlayer">
     <div class="row">
       <div class="col-sm-12 text-center">

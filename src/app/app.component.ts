@@ -15,12 +15,29 @@ export interface Player {
   styleUrls: ['./app.component.css']
 })
 export class AppComponent {
-  title = 'Asta FantaTigerz 2019';
+  /**
+   * The complete list of players.
+   */
   private players: Player[];
+
+  /**
+   * The current player.
+   */
   private currentPlayer: Player;
+
+  /**
+   * The list of recent players. This list has a maximum size of {@link MAX_LENGTH}.
+   */
   private recentPlayers: Player[] = [];
-  private availableIndexes: number[] = [];
+
+  /**
+   * The maximum number of recent players to show.
+   */
   private MAX_LENGTH: number = 10;
+
+  /**
+   * The converter that will parse the csv and populate a json file.
+   */
   private converter = csv({
     delimiter: ';',
     noheader: true,
@@ -46,7 +63,7 @@ export class AppComponent {
       .fromString(<string> fileReader.result)
       .then((players: Player[]) => {
         this.players = players;
-        this.initAvailableIndexes();
+        AppComponent.shuffle(this.players);
         this.drawNextPlayer();
       });
   }
@@ -56,16 +73,13 @@ export class AppComponent {
    */
   drawNextPlayer(): void {
     // If there are no more players, stop drawing
-    if (this.availableIndexes.length === 0) {
+    if (this.players.length === 0) {
       return;
     }
 
-    if (this.currentPlayer) {
-      this.updateRecentPlayers();
-    }
-
-    const index = this.availableIndexes.shift();
-    this.currentPlayer = this.players[index];
+    this.updateRecentPlayers();
+    this.currentPlayer = this.players[0];
+    this.players.splice(0, 1);
   }
 
   /**
@@ -81,16 +95,6 @@ export class AppComponent {
     if (this.recentPlayers.length > this.MAX_LENGTH) {
       this.recentPlayers.shift();
     }
-  }
-
-  /**
-   * Init {@link availableIndexes}, the support array that will be used to draw the next random player.
-   */
-  private initAvailableIndexes() {
-    for (let i = 0; i < this.players.length; i++) {
-      this.availableIndexes.push(i);
-    }
-    AppComponent.shuffle(this.availableIndexes);
   }
 
   /**
