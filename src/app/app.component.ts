@@ -45,6 +45,14 @@ export class AppComponent {
   });
 
   /**
+   * The shuffle strategy. Possible values are 'full' and 'role'.
+   * If draw strategy is 'full', then the entire players list will be full random.
+   * If draw strategy is 'role', then the entire players list will be built with random goalkeepers, then random
+   * defenders, then random midfielders and finally random strikers.
+   */
+  private shuffleStrategy: string = 'full';
+
+  /**
    * Parse the given csv file and start drawing players.
    * @param files The files array that contains the provided csv file.
    */
@@ -62,10 +70,42 @@ export class AppComponent {
     this.converter
       .fromString(<string> fileReader.result)
       .then((players: Player[]) => {
-        this.players = players;
-        AppComponent.shuffle(this.players);
+        this.players = this.shufflePlayersList(players);
         this.drawNextPlayer();
       });
+  }
+
+  /**
+   * Build the player list, taking in consideration the value of {@link shuffleStrategy}.
+   * @param players The list of players to shuffle
+   */
+  private shufflePlayersList(players: Player[]): Player[] {
+    if (this.shuffleStrategy === 'full') {
+      return AppComponent.shuffle(players);
+    }
+    return AppComponent.shuffleArrayPerRole(players);
+  }
+
+  /**
+   * Shuffle the provided players list per role.
+   * The entire list will be built with random goalkeepers, then random defenders, then random midfielders and
+   * finally random strikers.
+   * @param players The players list to shuffle per role
+   */
+  private static shuffleArrayPerRole(players: Player[]): Player[] {
+    const shuffledArrayPerRole: Player[] = [];
+
+    const goalkeepers = players.filter((player) => player.ruolo === 'P');
+    const defenders = players.filter((player) => player.ruolo === 'D');
+    const midfielders = players.filter((player) => player.ruolo === 'C');
+    const strikers = players.filter((player) => player.ruolo === 'A');
+
+    shuffledArrayPerRole.push(...AppComponent.shuffle(goalkeepers));
+    shuffledArrayPerRole.push(...AppComponent.shuffle(defenders));
+    shuffledArrayPerRole.push(...AppComponent.shuffle(midfielders));
+    shuffledArrayPerRole.push(...AppComponent.shuffle(strikers));
+
+    return shuffledArrayPerRole;
   }
 
   /**
@@ -101,7 +141,7 @@ export class AppComponent {
    * Shuffle the provided array.
    * @param array The array to shuffle
    */
-  private static shuffle(array) {
+  private static shuffle(array: Player[]): Player[]  {
     let currentIndex = array.length;
     let temporaryValue;
     let randomIndex;
@@ -118,5 +158,7 @@ export class AppComponent {
       array[currentIndex] = array[randomIndex];
       array[randomIndex] = temporaryValue;
     }
+
+    return array;
   }
 }
